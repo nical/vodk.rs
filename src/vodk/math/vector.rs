@@ -1,4 +1,3 @@
-
 use std::mem;
 use std::ops;
 //use std::fmt;
@@ -215,7 +214,6 @@ impl<T: Float+EpsilonEq, U> Eq for Vector2D<T, U> {
     }
 }
 
-
 #[allow(dead_code)]
 impl<T: ops::Add<T,T>, U>
     ops::Add<Vector4D<T,U>, Vector4D<T,U>>
@@ -279,7 +277,6 @@ impl<T : ops::Neg<T>, U>
         };
     }
 }
-
 
 #[allow(dead_code)]
 impl<T: Copy + Float, U> Vector3D<T, U> {
@@ -407,8 +404,6 @@ impl<T : ops::Neg<T>, U>
         };
     }
 }
-
-
 
 #[allow(dead_code)]
 impl<T: Copy + Num, U> Vector2D<T, U> {
@@ -879,17 +874,75 @@ impl EpsilonEq for f64 {
     }
 }
 
-#[test]
-fn test_vec4() {
-    let p1 = vec4(1.0, 2.0, 3.0, 0.0);
-    let p2 = -p1;
-    let p3 = p1 + p2;
-    let d = p1.dot(&p2);
-    let m1 = Mat4::identity();
-    let p5 = m1.transform(&p1);
-    let mut m1 = Mat4::identity();
-    m1.rotate(PI, &vec3(1.0, 0.0, 0.0));
-    let p6 = m1.transform(&p1);
-    assert_eq!(p1, p5);
-    assert_eq!(p6, vec4(1.0, -2.0, -3.0, 0.0));
+mod tests {
+    use super::{vec3, vec4, PI, Mat4};
+
+    #[test]
+    fn test_vec3() {
+        let v1 = vec3(1.0, 2.0, 3.0);
+        assert_eq!(v1, vec3(1.0, 2.0, 3.0));
+    }
+
+    #[test]
+    fn test_vec3_substraction() {
+        let v1 = vec3(1.0, 2.0, 3.0);
+        let v2 = -v1;
+        assert_eq!(v2, vec3(-1.0, -2.0, -3.0));
+    }
+
+    #[test]
+    fn test_vec3_addition() {
+        let v1 = vec3(1.0, 2.0, 3.0);
+        let v2 = -v1;
+        let v3 = v1 + v2;
+        assert_eq!(v3, vec3(0.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn test_vec3_dot() {
+        let v1 = vec3(1.0, 2.0, 3.0);
+        let v2 = -v1;
+        let d = v1.dot(&v2);
+        // 1 * -1 + 2 * -2 + 3 * -3 == -14
+        assert_eq!(d, -14.0);
+    }
+
+    #[test]
+    fn test_vec4() {
+        let p1 = vec4(1.0, 2.0, 3.0, 0.0);
+        let p2 = -p1;
+        let p3 = p1 + p2;
+        let d = p1.dot(&p2);
+        let m1 = Mat4::identity();
+        let p5 = m1.transform(&p1);
+        let mut m1 = Mat4::identity();
+        m1.rotate(PI, &vec3(1.0, 0.0, 0.0));
+        let p6 = m1.transform(&p1);
+        assert_eq!(p1, p5);
+        assert_eq!(p6, vec4(1.0, -2.0, -3.0, 0.0));
+    }
+
+    #[test]
+    fn test_vec4_substraction() {
+        let v1 = vec4(1.0, 2.0, 3.0, 0.0);
+        let v2 = -v1;
+        assert_eq!(v2, vec4(-1.0, -2.0, -3.0, 0.0));
+    }
+
+    #[test]
+    fn test_vec4_addition() {
+        let v1 = vec4(1.0, 2.0, 3.0, 0.0);
+        let v2 = -v1;
+        let v3 = v1 + v2;
+        assert_eq!(v3, vec4(0.0, 0.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn test_vec4_dot() {
+        let v1 = vec4(1.0, 2.0, 3.0, 0.0);
+        let v2 = -v1;
+        let d = v1.dot(&v2);
+        // 1 * -1 + 2 * -2 + 3 * -3 == -14
+        assert_eq!(d, -14.0);
+    }
 }
