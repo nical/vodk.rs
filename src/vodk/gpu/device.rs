@@ -9,7 +9,7 @@ pub type UniformBindingIndex = i32;
 
 #[deriving(Show, Clone, PartialEq)]
 pub struct UniformBlockLocation { pub index: i16 }
-#[deriving(Show, Clone, PartialEq)]
+#[deriving(Show, Copy, Clone, PartialEq)]
 pub struct VertexAttributeLocation { pub index: i16 }
 
 #[deriving(Clone, Show)]
