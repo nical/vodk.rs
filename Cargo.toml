@@ -1,0 +1,27 @@
+[package]
+
+name = "vodk-rs"
+version = "0.0.1"
+authors = ["Nicolas Silva <nical.silva@gmail.com>"]
+
+[dependencies.gl]
+
+git = "https://github.com/bjz/gl-rs"
+rev = "b5e3f4f76c31bc1b459d5e4c10d879ffa4f67c6e"
+
+[dependencies.glfw]
+
+git = "https://github.com/bjz/glfw-rs"
+rev = "e9d64f066d89e415d77046731c069df382b8ddd4"
+
+[dependancies.png]
+
+git = "https://github.com/servo/rust-png"
+rev =  "f060a2d9484a150de286f930eb80f9f3bff3ea38"
+
+[[bin]]
+name = "vodk-rs"
+test = false
+doc = false
+build = "sh BUILD.sh"
+
