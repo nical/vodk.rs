@@ -27,7 +27,7 @@ pub struct TextureDescriptor {
     pub flags: TextureFlags,
 }
 
-#[deriving(Show)]
+#[deriving(Show, Copy)]
 pub struct BufferDescriptor {
     pub size: u32,
     pub update_hint: UpdateHint,
@@ -40,7 +40,7 @@ pub struct GeometryDescriptor<'l> {
     pub index_buffer: Option<BufferObject>,
 }
 
-#[deriving(Show)]
+#[deriving(Show, Copy)]
 pub struct ShaderStageDescriptor<'l> {
     pub stage_type: ShaderType,
     pub src: &'l[&'l str],

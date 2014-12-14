@@ -29,7 +29,7 @@ pub const COLOR  : TargetTypes = 1 << 0;
 pub const DEPTH  : TargetTypes = 1 << 1;
 pub const STENCIL: TargetTypes = 1 << 2;
 
-#[deriving(PartialEq, Clone, Show)]
+#[deriving(PartialEq, Copy, Clone, Show)]
 pub enum ShaderType {
     FRAGMENT_SHADER,
     VERTEX_SHADER,
@@ -65,14 +65,14 @@ pub enum PixelFormat {
     A_F32,
 }
 
-#[deriving(PartialEq, Clone, Show)]
+#[deriving(PartialEq, Copy, Clone, Show)]
 pub enum UpdateHint {
     STATIC,
     STREAM,
     DYNAMIC,
 }
 
-#[deriving(PartialEq, Clone, Show)]
+#[deriving(PartialEq, Copy, Clone, Show)]
 pub enum BufferType {
     VERTEX,
     INDEX,

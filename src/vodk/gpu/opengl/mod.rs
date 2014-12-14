@@ -206,7 +206,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 gl::AttachShader(pipeline.handle, stage.handle);
             }
 
-            for &(ref name, loc) in descriptor.attrib_locations.iter() {
+            for &(ref name, ref loc) in descriptor.attrib_locations.iter() {
                 if loc.index < 0 {
                     gl::DeleteProgram(pipeline.handle);
                     return Err(ResultCode::INVALID_ARGUMENT_ERROR);
@@ -475,7 +475,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
             }
 
             match descriptor.depth {
-                Some(d) => {
+                Some(ref d) => {
                     gl::FramebufferTexture2D(
                         gl::FRAMEBUFFER,
                         gl::DEPTH_ATTACHMENT,
@@ -492,7 +492,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
             }
 
             match descriptor.stencil {
-                Some(s) => {
+                Some(ref s) => {
                     gl::FramebufferTexture2D(
                         gl::FRAMEBUFFER,
                         gl::STENCIL_ATTACHMENT,
