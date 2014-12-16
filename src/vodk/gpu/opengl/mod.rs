@@ -4,7 +4,6 @@ use super::constants::*;
 use super::objects::*;
 use super::logging::LoggingProxy;
 
-use std::string::raw;
 use std::mem;
 use libc::c_void;
 
@@ -181,7 +180,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 shader.handle, 512, &mut length,
                 mem::transmute(buffer.as_mut_ptr())
             );
-            return Err((ResultCode::SHADER_COMPILATION_ERROR, raw::from_buf(buffer.as_ptr())));
+            return Err((ResultCode::SHADER_COMPILATION_ERROR, String::from_raw_buf(buffer.as_ptr())));
         }
     }
 
@@ -253,7 +252,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 mem::transmute(buffer.as_mut_ptr())
             );
 
-            return Err((ResultCode::SHADER_LINK_ERROR, raw::from_buf(buffer.as_ptr())));
+            return Err((ResultCode::SHADER_LINK_ERROR, String::from_raw_buf(buffer.as_ptr())));
         }
     }
 

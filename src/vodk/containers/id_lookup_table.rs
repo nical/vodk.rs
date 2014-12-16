@@ -1,4 +1,5 @@
-use super::freelist_vector::{PodFreeListVector, Index, FREE_LIST_NONE};
+use super::freelist_vector::{Index, FREE_LIST_NONE};
+
 
 pub struct IdLookupTable {
     // Dense array

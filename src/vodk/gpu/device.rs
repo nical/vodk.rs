@@ -169,7 +169,6 @@ impl<Backend: DeviceBackend> Device<Backend> {
         flags: MapFlags,
         data: &mut &mut[T]
     ) -> ResultCode {
-        unsafe {
             let mut ptr = 0 as *mut u8;
             let result = self.backend.map_buffer(buffer, flags, &mut ptr);
             if result != ResultCode::OK {
@@ -182,7 +181,6 @@ impl<Backend: DeviceBackend> Device<Backend> {
                 ptr,
                 buffer.size as uint / mem::size_of::<T>()
             ));
-        }
         return ResultCode::OK;
     }
 
