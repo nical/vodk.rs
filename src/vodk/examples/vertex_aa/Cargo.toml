@@ -24,3 +24,6 @@ path = "../../gpu/"
 
 [dependencies.gfx2d]
 path = "../../gfx2d/"
+
+[dependencies.time]
+git = "http://github.com/rust-lang/time"
