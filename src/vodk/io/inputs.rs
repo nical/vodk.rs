@@ -12,19 +12,19 @@ pub enum Action {
 
 #[deriving(Show, PartialEq)]
 pub enum MouseButton {
-    MouseButtonLeft,
-    MouseButtonRight,
-    MouseButtonMiddle,
+    Left,
+    Right,
+    Middle,
 }
 
 #[deriving(Show, PartialEq)]
 pub enum Event {
-    CursorPosEvent(f32, f32),
-    MouseButtonEvent(MouseButton, Action),
-    ScrollEvent(f32, f32),
-    FocusEvent(bool),
-    CloseEvent,
-    FramebufferSizeEvent(i32, i32),
+    CursorPos(f32, f32),
+    MouseButton(MouseButton, Action),
+    Scroll(f32, f32),
+    Focus(bool),
+    Close,
+    FramebufferSize(i32, i32),
     DummyEvent,
 }
 

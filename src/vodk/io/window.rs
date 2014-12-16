@@ -66,36 +66,37 @@ impl Window {
 }
 
 fn from_glfw_mouse_button(b: glfw::MouseButton) -> inputs::MouseButton {
+    use inputs::MouseButton;
     match b {
-        glfw::MouseButtonLeft => inputs::MouseButtonLeft,
-        glfw::MouseButtonMiddle => inputs::MouseButtonMiddle,
-        glfw::MouseButtonRight => inputs::MouseButtonRight,
-        _ => inputs::MouseButtonLeft,
+        glfw::MouseButtonLeft => MouseButton::Left,
+        glfw::MouseButtonMiddle => MouseButton::Middle,
+        glfw::MouseButtonRight => MouseButton::Right,
+        _ => MouseButton::Left,
     }
 }
 
-fn from_glfw_action(a: glfw::Action) -> inputs::Action {
+fn from_glfw_action(action: glfw::Action) -> inputs::Action {
     use glfw::Action;
-    match a {
-        Press => inputs::Action::Press,
-        Release => inputs::Action::Release,
-        Repeat => inputs::Action::Repeat,
+    match action {
+        Action::Press => inputs::Action::Press,
+        Action::Release => inputs::Action::Release,
+        Action::Repeat => inputs::Action::Repeat,
     }
 }
 
-fn from_glfw_event(e: glfw::WindowEvent) -> inputs::Event {
+fn from_glfw_event(event: glfw::WindowEvent) -> inputs::Event {
     use glfw::WindowEvent;
-    match e {
-        glfw::WindowEvent::CursorPos(x, y)       => inputs::Event::CursorPosEvent(x as f32, y as f32),
-        glfw::Window::MouseButton(button, action, _) => {
+    match event {
+        WindowEvent::CursorPos(x, y)       => inputs::Event::CursorPos(x as f32, y as f32),
+        WindowEvent::MouseButton(button, action, _) => {
             inputs::Event::MouseButton(
                 from_glfw_mouse_button(button),
                 from_glfw_action(action)
         )},
-        glfw::WindowEvent::Focus(focus)          => inputs::Event::FocusEvent(focus),
-        glfw::WindowEvent::Close                 => inputs::Event::CloseEvent,
-        glfw::WindowEvent::Scroll(dx, dy)        => inputs::Event::ScrollEvent(dx as f32, dy as f32),
-        glfw::WindowEvent::FramebufferSize(w, h) => inputs::Event::FramebufferSizeEvent(w, h),
+        WindowEvent::Focus(focus)          => inputs::Event::Focus(focus),
+        WindowEvent::Close                 => inputs::Event::Close,
+        WindowEvent::Scroll(dx, dy)        => inputs::Event::Scroll(dx as f32, dy as f32),
+        WindowEvent::FramebufferSize(w, h) => inputs::Event::FramebufferSize(w, h),
         _ => inputs::Event::DummyEvent,
     }
 }
