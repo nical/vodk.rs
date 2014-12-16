@@ -17,10 +17,10 @@ impl Window {
     pub fn new(w: u32, h: u32, title: &str) -> Window {
         let glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
 
-        glfw.window_hint(glfw::ContextVersion(3, 1));
-        glfw.window_hint(glfw::OpenglForwardCompat(true));
+        glfw.window_hint(glfw::WindowHint::ContextVersion(3, 1));
+        glfw.window_hint(glfw::WindowHint::OpenglForwardCompat(true));
 
-        let (glfw_win, events) = glfw.create_window(w, h, title, glfw::Windowed)
+        let (glfw_win, events) = glfw.create_window(w, h, title, glfw::WindowMode::Windowed)
             .expect("Failed to create GLFW window.");
 
         glfw_win.set_size_polling(true);
@@ -75,24 +75,27 @@ fn from_glfw_mouse_button(b: glfw::MouseButton) -> inputs::MouseButton {
 }
 
 fn from_glfw_action(a: glfw::Action) -> inputs::Action {
+    use glfw::Action;
     match a {
-        glfw::Press => inputs::Press,
-        glfw::Release => inputs::Release,
-        glfw::Repeat => inputs::Repeat,
+        Press => inputs::Action::Press,
+        Release => inputs::Action::Release,
+        Repeat => inputs::Action::Repeat,
     }
 }
 
 fn from_glfw_event(e: glfw::WindowEvent) -> inputs::Event {
+    use glfw::WindowEvent;
     match e {
-        glfw::CursorPosEvent(x, y) => inputs::CursorPosEvent(x as f32, y as f32),
-        glfw::MouseButtonEvent(button, action, _) => inputs::MouseButtonEvent(
-            from_glfw_mouse_button(button),
-            from_glfw_action(action)
-        ),
-        glfw::FocusEvent(focus) => inputs::FocusEvent(focus),
-        glfw::CloseEvent => inputs::CloseEvent,
-        glfw::ScrollEvent(dx, dy) => inputs::ScrollEvent(dx as f32, dy as f32),
-        glfw::FramebufferSizeEvent(w, h) => inputs::FramebufferSizeEvent(w, h),
-        _ => inputs::DummyEvent,
+        glfw::WindowEvent::CursorPos(x, y)       => inputs::Event::CursorPosEvent(x as f32, y as f32),
+        glfw::Window::MouseButton(button, action, _) => {
+            inputs::Event::MouseButton(
+                from_glfw_mouse_button(button),
+                from_glfw_action(action)
+        )},
+        glfw::WindowEvent::Focus(focus)          => inputs::Event::FocusEvent(focus),
+        glfw::WindowEvent::Close                 => inputs::Event::CloseEvent,
+        glfw::WindowEvent::Scroll(dx, dy)        => inputs::Event::ScrollEvent(dx as f32, dy as f32),
+        glfw::WindowEvent::FramebufferSize(w, h) => inputs::Event::FramebufferSizeEvent(w, h),
+        _ => inputs::Event::DummyEvent,
     }
 }

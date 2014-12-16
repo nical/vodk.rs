@@ -3,7 +3,7 @@
 
 use range::Range;
 
-#[deriving(Clone, Show, PartialEq)]
+#[deriving(Copy, Clone, Show, PartialEq)]
 pub struct BlockId {
     index: uint,
     gen: u16,
@@ -17,7 +17,7 @@ pub struct AllocatorBlock {
     gen: u16,
 }
 
-#[deriving(Clone, Show, PartialEq)]
+#[deriving(Copy, Clone, Show, PartialEq)]
 pub enum BlockState {
     Used,
     Unused,

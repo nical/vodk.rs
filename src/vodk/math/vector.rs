@@ -40,7 +40,7 @@ pub trait ScalarMul<T> {
     fn scalar_mul_in_place(&mut self, scalar: T);
 }
 
-#[deriving(Clone, Show, Zero)]
+#[deriving(Copy, Clone, Show, Zero)]
 pub struct Vector2D<Unit = Untyped> {
     pub x: f32,
     pub y: f32,
