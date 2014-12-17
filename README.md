@@ -4,7 +4,8 @@ vodk.rs
 Rust experiments, mostly around game programming related stuff.
 
 Mostly compatible with rust:
-    rustc 0.13.0-nightly (ffc111889 2014-12-12 21:07:19 +0000)
+    rustc 0.13.0-nightly (0669a432a 2014-12-15 22:11:44 +0000)
+
 
 Building
 ========
@@ -19,7 +20,7 @@ First build
 
 ### Dependancies
 
-(Cargo)[https://crates.io/] take care of the dependancies.
+[Cargo](https://crates.io/) take care of the dependancies.
 
 #### Legacy:
 
@@ -33,4 +34,3 @@ Vodk currently depends on this Rust crates.
 Troubleshooting(s)
 ------------------
 
-Old version of OpenGL are not supported.
