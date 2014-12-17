@@ -27,11 +27,24 @@ git = "http://github.com/rust-lang/time"
 [dependencies.data]
 path = "src/vodk/data"
 
+[dependencies.gfx2d]
+path = "src/vodk/gfx2d"
+
 [dependencies.math]
 path = "src/vodk/math/"
 
 [dependencies.gpu]
 path = "src/vodk/gpu/"
 
-[dependencies.gfx2d]
-path = "src/vodk/gfx2d/"
+[dependencies.io]
+path = "src/vodk/io/"
+
+[dependencies.geom]
+path = "src/vodk/geom/"
+
+[dependencies.containers]
+path = "src/vodk/containers/"
+
+# Impossible to build at the moment.
+#[dependencies.logic]
+#path = "src/vodk/logic"
