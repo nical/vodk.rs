@@ -1,10 +1,11 @@
+extern crate gpu;
+extern crate io;
 
 use gpu::context as gpu;
 use gpu::opengl;
 use io::inputs;
 use io::window;
 use std::io::timer::sleep;
-use time;
 use std::time::duration::Duration;
 
 pub trait App {

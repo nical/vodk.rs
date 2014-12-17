@@ -4,9 +4,6 @@ use glfw::Context;
 use std::rc::Rc;
 use super::inputs;
 
-use time;
-use std::io::timer::sleep;
-
 pub struct Window {
     glfw_win: Rc<glfw::Window>,
     glfw: glfw::Glfw,
@@ -45,7 +42,7 @@ impl Window {
     pub fn init_opengl(&mut self) -> bool {
         // make the context current before calling gl::load_with.
         self.glfw_win.make_current();
-        gl::load_with(|s| self.glfw.get_proc_address(s));
+        gl::load_with(|s| self.glfw.get_proc_address_raw(s));
         return true;
     }
 
