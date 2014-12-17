@@ -10,8 +10,20 @@ authors = [
 name = "gpu"
 path = "./lib.rs"
 
+[[example]]
+name = "triangle"
+path = "./examples/triangle/main.rs"
+
 [dependencies.data]
 path = "../data/"
 
 [dependencies.gl]
 git = "https://github.com/bjz/gl-rs"
+
+[dev_dependencies.glfw]
+git = "https://github.com/bjz/glfw-rs"
+
+# For triangle example.
+[dev_dependancies.time]
+git = "https://github.com/rust-lang/time"
+
