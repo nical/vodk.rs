@@ -34,7 +34,7 @@ pub fn run<T: App>(w: u32, h: u32, title: &str) {
         input_events.clear();
         window.poll_events(&mut input_events);
         app.handle_events(input_events.as_slice());
-        
+
         if app.should_close() {
             break;
         }

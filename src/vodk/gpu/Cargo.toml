@@ -24,6 +24,6 @@ git = "https://github.com/bjz/gl-rs"
 git = "https://github.com/bjz/glfw-rs"
 
 # For triangle example.
-[dev_dependancies.time]
-git = "https://github.com/rust-lang/time"
+#[dev_dependancies.time]
+#git = "https://github.com/rust-lang/time"
 
