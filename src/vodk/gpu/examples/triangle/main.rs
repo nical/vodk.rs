@@ -27,10 +27,10 @@ struct Vertex {
 fn main() {
     let glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
 
-    glfw.window_hint(glfw::ContextVersion(3, 1));
-    glfw.window_hint(glfw::OpenglForwardCompat(true));
+    glfw.window_hint(glfw::WindowHint::ContextVersion(3, 1));
+    glfw.window_hint(glfw::WindowHint::OpenglForwardCompat(true));
 
-    let (window, events) = glfw.create_window(800, 600, "Triangle test", glfw::Windowed)
+    let (window, events) = glfw.create_window(800, 600, "Triangle test", glfw::WindowMode::Windowed)
         .expect("Failed to create GLFW window.");
 
     window.set_size_polling(true);
@@ -50,9 +50,9 @@ fn main() {
     // interesting stuff starts here
 
     let vbo_desc = BufferDescriptor {
-        size: 3*5*4,
-        buffer_type: VERTEX_BUFFER,
-        update_hint: STATIC_UPDATE,
+        size: 3 * 5 * 4,
+        buffer_type: BufferType::VERTEX,
+        update_hint: UpdateHint::STATIC,
     };
 
     let vbo = ctx.create_buffer(&vbo_desc).ok().unwrap();
@@ -125,7 +125,7 @@ fn main() {
     let geom = ctx.create_geometry(&geom_desc).ok().unwrap();
 
     let vertex_stage_desc = ShaderStageDescriptor {
-        stage_type: VERTEX_SHADER,
+        stage_type: ShaderType::VERTEX_SHADER,
         src: &[shaders::BASIC_VERTEX]
     };
 
@@ -133,7 +133,7 @@ fn main() {
 
     match ctx.get_shader_stage_result(vertex_shader) {
         Err((_code, msg)) => {
-            fail!(
+            panic!(
                 "{}\nshader build failed - {}\n",
                 shaders::BASIC_VERTEX, msg
             );
@@ -142,13 +142,13 @@ fn main() {
     }
 
     let fragment_stage_desc = ShaderStageDescriptor {
-        stage_type: FRAGMENT_SHADER,
+        stage_type: ShaderType::FRAGMENT_SHADER,
         src: &[shaders::BASIC_FRAGMENT]
     };
     let fragment_shader = ctx.create_shader_stage(&fragment_stage_desc).ok().unwrap();
     match ctx.get_shader_stage_result(fragment_shader) {
         Err((_code, msg)) => {
-            fail!(
+            panic!(
                 "{}\nshader build failed - {}\n",
                 shaders::BASIC_FRAGMENT, msg
             );
@@ -167,10 +167,10 @@ fn main() {
         ]
     };
     let pipeline = ctx.create_shader_pipeline(&pipeline_desc).ok().unwrap();
-    
+
     match ctx.get_shader_pipeline_result(pipeline) {
         Err((_code, msg)) => {
-            fail!("Pipline link failed - {}\n", msg);
+            panic!("Pipline link failed - {}\n", msg);
         }
         _ => {}
     }
@@ -179,8 +179,8 @@ fn main() {
     ctx.set_viewport(0, 0, 800, 600);
 
     let dyn_ubo_desc = BufferDescriptor {
-        buffer_type: UNIFORM_BUFFER,
-        update_hint: DYNAMIC_UPDATE,
+        buffer_type: BufferType::UNIFORM,
+        update_hint: UpdateHint::DYNAMIC,
         size: 4,
     };
 
@@ -216,7 +216,7 @@ fn main() {
 
         ctx.clear(COLOR);
         ctx.set_shader(pipeline);
-        ctx.draw(geom, VertexRange(0, 3), TRIANGLES, NO_BLENDING, COLOR);
+        ctx.draw(geom, Range::VertexRange(0, 3), TRIANGLES, BlendMode::NONE, COLOR);
         ctx.flush();
 
         window.swap_buffers();

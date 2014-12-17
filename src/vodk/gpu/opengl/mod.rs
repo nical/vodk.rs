@@ -4,7 +4,6 @@ use super::constants::*;
 use super::objects::*;
 use super::logging::LoggingProxy;
 
-use std::string::raw;
 use std::mem;
 use libc::c_void;
 
@@ -181,7 +180,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 shader.handle, 512, &mut length,
                 mem::transmute(buffer.as_mut_ptr())
             );
-            return Err((ResultCode::SHADER_COMPILATION_ERROR, raw::from_buf(buffer.as_ptr())));
+            return Err((ResultCode::SHADER_COMPILATION_ERROR, String::from_raw_buf(buffer.as_ptr())));
         }
     }
 
@@ -206,7 +205,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 gl::AttachShader(pipeline.handle, stage.handle);
             }
 
-            for &(ref name, loc) in descriptor.attrib_locations.iter() {
+            for &(ref name, ref loc) in descriptor.attrib_locations.iter() {
                 if loc.index < 0 {
                     gl::DeleteProgram(pipeline.handle);
                     return Err(ResultCode::INVALID_ARGUMENT_ERROR);
@@ -253,7 +252,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
                 mem::transmute(buffer.as_mut_ptr())
             );
 
-            return Err((ResultCode::SHADER_LINK_ERROR, raw::from_buf(buffer.as_ptr())));
+            return Err((ResultCode::SHADER_LINK_ERROR, String::from_raw_buf(buffer.as_ptr())));
         }
     }
 
@@ -475,7 +474,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
             }
 
             match descriptor.depth {
-                Some(d) => {
+                Some(ref d) => {
                     gl::FramebufferTexture2D(
                         gl::FRAMEBUFFER,
                         gl::DEPTH_ATTACHMENT,
@@ -492,7 +491,7 @@ impl DeviceBackend for OpenGLDeviceBackend {
             }
 
             match descriptor.stencil {
-                Some(s) => {
+                Some(ref s) => {
                     gl::FramebufferTexture2D(
                         gl::FRAMEBUFFER,
                         gl::STENCIL_ATTACHMENT,

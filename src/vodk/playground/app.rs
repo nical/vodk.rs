@@ -1,10 +1,11 @@
+extern crate gpu;
+extern crate io;
 
 use gpu::context as gpu;
 use gpu::opengl;
 use io::inputs;
 use io::window;
 use std::io::timer::sleep;
-use time;
 use std::time::duration::Duration;
 
 pub trait App {
@@ -33,7 +34,7 @@ pub fn run<T: App>(w: u32, h: u32, title: &str) {
         input_events.clear();
         window.poll_events(&mut input_events);
         app.handle_events(input_events.as_slice());
-        
+
         if app.should_close() {
             break;
         }
@@ -111,11 +112,11 @@ pub fn setup_shader(
     let program = ctx.create_shader();
 
     ctx.compile_shader_stage(vs, &[vs_src]).map_err(
-        |e| { fail!("Failed to compile the vertex shader: {}", e); return; }
+        |e| { panic!("paniced to compile the vertex shader: {}", e); return; }
     );
 
     ctx.compile_shader_stage(fs, &[fs_src]).map_err(
-        |e| { fail!("Failed to compile the fragment shader: {}", e); return; }
+        |e| { panic!("paniced to compile the fragment shader: {}", e); return; }
     );
 
     ctx.link_shader(program, [vs, fs], &[
@@ -125,7 +126,7 @@ pub fn setup_shader(
         ("a_color", a_color),
         ("a_extrusion", a_extrusion),
     ]).map_err(
-        |e| { fail!("Failed to link the text's shader program: {}", e); return; }
+        |e| { panic!("Failed to link the text's shader program: {}", e); return; }
     );
 
     let uniforms = UniformLayout::new(ctx, program);

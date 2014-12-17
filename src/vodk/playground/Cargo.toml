@@ -13,8 +13,11 @@ path = "../io/"
 [dependencies.gpu]
 path = "../gpu/"
 
+[dependencies.time]
+git = "https://github.com/rust-lang/time"
 
-[[lib]]
+
+[lib]
 name = "app"
 path = "./app.rs"
 

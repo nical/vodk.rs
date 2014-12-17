@@ -1,0 +1,50 @@
+[package]
+name = "vodk-rs"
+version = "0.0.1"
+authors = ["Nicolas Silva <nical.silva@gmail.com>"]
+
+[lib]
+name = "vodk"
+path = "src/vodk/lib.rs"
+
+[[example]]
+name = "cube_example"
+path = "./example/cube/main.rs"
+
+[[example]]
+name = "vertex_aa"
+path = "./example/vertex_aa/main.rs"
+
+[dependencies.gl]
+git = "https://github.com/bjz/gl-rs"
+
+[dependencies.glfw]
+git = "https://github.com/bjz/glfw-rs"
+
+[dependencies.time]
+git = "http://github.com/rust-lang/time"
+
+[dependencies.data]
+path = "src/vodk/data"
+
+[dependencies.gfx2d]
+path = "src/vodk/gfx2d"
+
+[dependencies.math]
+path = "src/vodk/math/"
+
+[dependencies.gpu]
+path = "src/vodk/gpu/"
+
+[dependencies.io]
+path = "src/vodk/io/"
+
+[dependencies.geom]
+path = "src/vodk/geom/"
+
+[dependencies.containers]
+path = "src/vodk/containers/"
+
+# Impossible to build at the moment.
+#[dependencies.logic]
+#path = "src/vodk/logic"

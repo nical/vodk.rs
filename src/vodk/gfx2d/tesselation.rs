@@ -5,7 +5,6 @@ use style::{FillStyle, StrokeStyle, StrokeFlags};
 use style;
 use color::Rgba;
 use shapes;
-use data;
 use std::num::FloatMath;
 
 static PI: f32 = 3.1415;

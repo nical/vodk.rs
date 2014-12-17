@@ -9,7 +9,7 @@ pub type UniformBindingIndex = i32;
 
 #[deriving(Show, Clone, PartialEq)]
 pub struct UniformBlockLocation { pub index: i16 }
-#[deriving(Show, Clone, PartialEq)]
+#[deriving(Show, Copy, Clone, PartialEq)]
 pub struct VertexAttributeLocation { pub index: i16 }
 
 #[deriving(Clone, Show)]
@@ -27,7 +27,7 @@ pub struct TextureDescriptor {
     pub flags: TextureFlags,
 }
 
-#[deriving(Show)]
+#[deriving(Show, Copy)]
 pub struct BufferDescriptor {
     pub size: u32,
     pub update_hint: UpdateHint,
@@ -40,7 +40,7 @@ pub struct GeometryDescriptor<'l> {
     pub index_buffer: Option<BufferObject>,
 }
 
-#[deriving(Show)]
+#[deriving(Show, Copy)]
 pub struct ShaderStageDescriptor<'l> {
     pub stage_type: ShaderType,
     pub src: &'l[&'l str],
@@ -169,7 +169,6 @@ impl<Backend: DeviceBackend> Device<Backend> {
         flags: MapFlags,
         data: &mut &mut[T]
     ) -> ResultCode {
-        unsafe {
             let mut ptr = 0 as *mut u8;
             let result = self.backend.map_buffer(buffer, flags, &mut ptr);
             if result != ResultCode::OK {
@@ -182,7 +181,6 @@ impl<Backend: DeviceBackend> Device<Backend> {
                 ptr,
                 buffer.size as uint / mem::size_of::<T>()
             ));
-        }
         return ResultCode::OK;
     }
 

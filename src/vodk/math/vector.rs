@@ -40,7 +40,7 @@ pub trait ScalarMul<T> {
     fn scalar_mul_in_place(&mut self, scalar: T);
 }
 
-#[deriving(Clone, Show, Zero)]
+#[deriving(Copy, Clone, Show, Zero)]
 pub struct Vector2D<Unit = Untyped> {
     pub x: f32,
     pub y: f32,
@@ -165,7 +165,7 @@ impl<U> PartialEq for Vector2D<U> {
 impl<U> ops::Add<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 
     #[inline]
-    fn add(&self, rhs: &Vector4D<U>) -> Vector4D<U> {
+    fn add(self, rhs: Vector4D<U>) -> Vector4D<U> {
         return Vector4D {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -179,7 +179,7 @@ impl<U> ops::Add<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 impl<U> ops::Sub<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 
     #[inline]
-    fn sub(&self, rhs: &Vector4D<U>) -> Vector4D<U> {
+    fn sub(self, rhs: Vector4D<U>) -> Vector4D<U> {
         return Vector4D {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
@@ -193,7 +193,7 @@ impl<U> ops::Sub<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 impl<U> ops::Mul<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Vector4D<U>) -> Vector4D<U> {
+    fn mul(self, rhs: Vector4D<U>) -> Vector4D<U> {
         return Vector4D {
             x: self.x * rhs.x,
             y: self.y * rhs.y,
@@ -229,7 +229,7 @@ impl<U> ScalarMul<f32> for Vector4D<U> {
 impl<U> ops::Div<Vector4D<U>, Vector4D<U>> for Vector4D<U> {
 
     #[inline]
-    fn div(&self, rhs: &Vector4D<U>) -> Vector4D<U> {
+    fn div(self, rhs: Vector4D<U>) -> Vector4D<U> {
         return Vector4D {
             x: self.x / rhs.x,
             y: self.y / rhs.y,
@@ -351,7 +351,7 @@ impl<U> Matrix4x4<U> {
 impl<U> ops::Add<Vector3D<U>, Vector3D<U>> for Vector3D<U> {
 
     #[inline]
-    fn add(&self, rhs: &Vector3D<U>) -> Vector3D<U> {
+    fn add(self, rhs: Vector3D<U>) -> Vector3D<U> {
         return Vector3D {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -364,7 +364,7 @@ impl<U> ops::Add<Vector3D<U>, Vector3D<U>> for Vector3D<U> {
 impl<U> ops::Sub<Vector3D<U>, Vector3D<U>> for Vector3D<U> {
 
     #[inline]
-    fn sub(&self, rhs: &Vector3D<U>) -> Vector3D<U> {
+    fn sub(self, rhs: Vector3D<U>) -> Vector3D<U> {
         return Vector3D {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
@@ -377,7 +377,7 @@ impl<U> ops::Sub<Vector3D<U>, Vector3D<U>> for Vector3D<U> {
 impl<U> ops::Mul<Vector3D<U>, Vector3D<U>> for Vector3D<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Vector3D<U>) -> Vector3D<U> {
+    fn mul(self, rhs: Vector3D<U>) -> Vector3D<U> {
         return Vector3D {
             x: self.x * rhs.x,
             y: self.y * rhs.y,
@@ -473,7 +473,7 @@ impl<U> Vector2D<U> {
 impl<U> ops::Add<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 
     #[inline]
-    fn add(&self, rhs: &Vector2D<U>) -> Vector2D<U> {
+    fn add(self, rhs: Vector2D<U>) -> Vector2D<U> {
         return Vector2D {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -485,7 +485,7 @@ impl<U> ops::Add<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 impl<U> ops::Sub<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 
     #[inline]
-    fn sub(&self, rhs: &Vector2D<U>) -> Vector2D<U> {
+    fn sub(self, rhs: Vector2D<U>) -> Vector2D<U> {
         return Vector2D {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
@@ -497,7 +497,7 @@ impl<U> ops::Sub<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 impl<U> ops::Mul<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Vector2D<U>) -> Vector2D<U> {
+    fn mul(self, rhs: Vector2D<U>) -> Vector2D<U> {
         return Vector2D {
             x: self.x * rhs.x,
             y: self.y * rhs.y,
@@ -528,7 +528,7 @@ impl<U> ScalarMul<f32> for Vector2D<U> {
 impl<U> ops::Div<Vector2D<U>, Vector2D<U>> for Vector2D<U> {
 
     #[inline]
-    fn div(&self, rhs: &Vector2D<U>) -> Vector2D<U> {
+    fn div(self, rhs: Vector2D<U>) -> Vector2D<U> {
         return Vector2D {
             x: self.x / rhs.x,
             y: self.y / rhs.y,
@@ -950,7 +950,7 @@ impl<U> Matrix4x4<U> {
 impl<U> ops::Mul<Matrix4x4<U>, Matrix4x4<U>> for Matrix4x4<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Matrix4x4<U>) -> Matrix4x4<U> {
+    fn mul(self, rhs: Matrix4x4<U>) -> Matrix4x4<U> {
         return Matrix4x4 {
             _11: self._11 * rhs._11 + self._12 * rhs._21 + self._13 * rhs._31 + self._14 * rhs._41,
             _21: self._21 * rhs._11 + self._22 * rhs._21 + self._23 * rhs._31 + self._24 * rhs._41,
@@ -976,7 +976,7 @@ impl<U> ops::Mul<Matrix4x4<U>, Matrix4x4<U>> for Matrix4x4<U> {
 impl<U> ops::Mul<Matrix3x3<U>, Matrix3x3<U>> for Matrix3x3<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Matrix3x3<U>) -> Matrix3x3<U> {
+    fn mul(self, rhs: Matrix3x3<U>) -> Matrix3x3<U> {
         return Matrix3x3 {
             _11: self._11 * rhs._11 + self._12 * rhs._21 + self._13 * rhs._31,
             _21: self._21 * rhs._11 + self._22 * rhs._21 + self._23 * rhs._31,
@@ -995,7 +995,7 @@ impl<U> ops::Mul<Matrix3x3<U>, Matrix3x3<U>> for Matrix3x3<U> {
 impl<U> ops::Mul<Matrix2x2<U>, Matrix2x2<U>> for Matrix2x2<U> {
 
     #[inline]
-    fn mul(&self, rhs: &Matrix2x2<U>) -> Matrix2x2<U> {
+    fn mul(self, rhs: Matrix2x2<U>) -> Matrix2x2<U> {
         return Matrix2x2 {
             _11: self._11 * rhs._11 + self._12 * rhs._21,
             _21: self._21 * rhs._11 + self._22 * rhs._21,
