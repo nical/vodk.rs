@@ -1,15 +1,11 @@
 [package]
-
-name = "vodk_id"
-version = "0.0.1"
+name = "sid_vec"
+version = "0.2.0"
 description = "Tiny library providing id types and an id-based vector."
 license = "MIT/Apache-2.0"
 authors = [ "Nicolas Silva <nical@fastmail.com>" ]
 repository = "https://github.com/nical/vodk.rs"
-include = [ "Cargo.toml", "src/*.rs" ]
-
 
 [lib]
 
-name = "vodk_id"
-path = "src/lib.rs"
+name = "sid_vec"

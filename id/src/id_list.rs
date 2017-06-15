@@ -2,67 +2,68 @@ use super::{ Identifier, FromIndex };
 use std::marker::PhantomData;
 use std::ops;
 
-pub trait IdCheck<ID> {
-    fn none() -> ID;
+/// A trait that defines how to choose the null (or invalid) Id.
+pub trait NullId<ID> {
+    fn null_id() -> ID;
 }
 
-struct IdListWrapper<ID, T> {
+struct IdFreeListWrapper<ID, T> {
     payload: T,
     list_next: ID,
     list_prev: ID,
 }
 
 /// A linked list stored in contiguous memory allowing random access through ids.
-pub struct IdList<ID: Identifier, Data, C: IdCheck<ID>> {
-    data: Vec<IdListWrapper<ID, Data>>,
+pub struct IdFreeList<ID: Identifier, Data, C: NullId<ID>> {
+    data: Vec<IdFreeListWrapper<ID, Data>>,
     first: ID,
     freelist: ID,
     _marker: PhantomData<C>,
 }
 
-impl<ID:Identifier, Data, C: IdCheck<ID>> IdList<ID, Data, C> {
+impl<ID:Identifier, Data, C: NullId<ID>> IdFreeList<ID, Data, C> {
 
     /// Create an empty list.
-    pub fn new() -> IdList<ID, Data, C> {
-        IdList {
+    pub fn new() -> IdFreeList<ID, Data, C> {
+        IdFreeList {
             data: Vec::new(),
-            first: C::none(),
-            freelist: C::none(),
+            first: C::null_id(),
+            freelist: C::null_id(),
             _marker: PhantomData,
         }
     }
 
     /// Create an empty list with a preallocated buffer.
-    pub fn with_capacity(size: usize) -> IdList<ID, Data, C> {
-        IdList {
+    pub fn with_capacity(size: usize) -> IdFreeList<ID, Data, C> {
+        IdFreeList {
             data: Vec::with_capacity(size as usize),
-            first: C::none(),
-            freelist: C::none(),
+            first: C::null_id(),
+            freelist: C::null_id(),
             _marker: PhantomData,
         }
     }
 
     /// Add an element to the list and return the id pointing to it
     pub fn add(&mut self, elt: Data) -> ID {
-        let none = C::none();
+        let null_id = C::null_id();
         let first = self.first;
-        if self.freelist == none {
+        if self.freelist == null_id {
             return self.push(elt);
         }
 
         let new_id = self.freelist;
         let freelist_next = self.data[new_id.to_index()].list_next;
-        self.data[new_id.to_index()] = IdListWrapper {
+        self.data[new_id.to_index()] = IdFreeListWrapper {
             payload: elt,
             list_next: first,
-            list_prev: C::none(),
+            list_prev: C::null_id(),
         };
-        if freelist_next != none {
-            self.data[freelist_next.to_index()].list_prev = none;
+        if freelist_next != null_id {
+            self.data[freelist_next.to_index()].list_prev = null_id;
         }
         self.freelist = freelist_next;
 
-        if first != none {
+        if first != null_id {
             self.data[first.to_index()].list_prev = new_id;
         }
         self.first = new_id;
@@ -75,16 +76,16 @@ impl<ID:Identifier, Data, C: IdCheck<ID>> IdList<ID, Data, C> {
     /// This means that repeated calls to push without calls to add or remove will produce
     /// contiguous indices.
     pub fn push(&mut self, elt: Data) -> ID {
-        let none = C::none();
+        let null_id = C::null_id();
         let first = self.first;
         let new_id: ID = FromIndex::from_index(self.data.len());
-        self.data.push( IdListWrapper {
+        self.data.push( IdFreeListWrapper {
             payload: elt,
             list_next: first,
-            list_prev: none,
+            list_prev: null_id,
         });
 
-        if first != none {
+        if first != null_id {
             self.data[first.to_index()].list_prev = new_id;
         }
         self.first = new_id;
@@ -96,21 +97,21 @@ impl<ID:Identifier, Data, C: IdCheck<ID>> IdList<ID, Data, C> {
     /// Note that this does not attempt to drop the element.
     pub fn remove(&mut self, id: ID) {
         debug_assert!(self.has_id(id));
-        let none = C::none();
+        let null_id = C::null_id();
         let prev = self.data[id.to_index()].list_prev;
         let next = self.data[id.to_index()].list_next;
-        if prev != none {
+        if prev != null_id {
             self.data[prev.to_index()].list_next = next;
         } else {
             debug_assert!(id == self.first);
             self.first = self.data[id.to_index()].list_next;
         }
-        if next != none {
+        if next != null_id {
             self.data[next.to_index()].list_prev = prev;
         }
         let elt = &mut self.data[id.to_index()];
         elt.list_next = self.freelist;
-        elt.list_prev = none;
+        elt.list_prev = null_id;
         self.freelist = id;
     }
 
@@ -149,37 +150,37 @@ impl<ID:Identifier, Data, C: IdCheck<ID>> IdList<ID, Data, C> {
     }
 
     /// Return true if there is no element in the list.
-    pub fn is_empty(&self) -> bool { self.first == C::none() }
+    pub fn is_empty(&self) -> bool { self.first == C::null_id() }
 
     /// Remove all elements from the list and clears the storage.
     /// Note that this will Drop the elements if Data implements Drop.
     pub fn clear(&mut self) {
         self.data.clear();
-        self.first = C::none();
-        self.freelist = C::none();
+        self.first = C::null_id();
+        self.freelist = C::null_id();
     }
 
     /// Return the next id in the list.
     pub fn next_id(&self, id: ID) -> Option<ID> {
         assert!(self.has_id(id));
         let next = self.data[id.to_index()].list_next;
-        return if next == C::none() { None } else { Some(next) };
+        return if next == C::null_id() { None } else { Some(next) };
     }
 
     /// Return the previous id in the list.
     pub fn previous_id(&self, id: ID) -> Option<ID> {
         assert!(self.has_id(id));
         let prev = self.data[id.to_index()].list_prev;
-        return if prev == C::none() { None } else { Some(prev) };
+        return if prev == C::null_id() { None } else { Some(prev) };
     }
 
     /// Return the first id in the list.
     pub fn first_id(&self) -> Option<ID> {
-        return if self.first == C::none() { None } else { Some(self.first) };
+        return if self.first == C::null_id() { None } else { Some(self.first) };
     }
 }
 
-impl<ID:Identifier, Data, C: IdCheck<ID>> ops::Index<ID> for IdList<ID, Data, C> {
+impl<ID:Identifier, Data, C: NullId<ID>> ops::Index<ID> for IdFreeList<ID, Data, C> {
     type Output = Data;
     fn index<'l>(&'l self, id: ID) -> &'l Data {
         // Enabling assertion is very expensive
@@ -188,7 +189,7 @@ impl<ID:Identifier, Data, C: IdCheck<ID>> ops::Index<ID> for IdList<ID, Data, C>
     }
 }
 
-impl<ID:Identifier, Data, C: IdCheck<ID>> ops::IndexMut<ID> for IdList<ID, Data, C> {
+impl<ID:Identifier, Data, C: NullId<ID>> ops::IndexMut<ID> for IdFreeList<ID, Data, C> {
     fn index_mut<'l>(&'l mut self, id: ID) -> &'l mut Data {
         // Enabling assertion is very expensive
         //debug_assert!(self.has_id(id));
@@ -196,6 +197,13 @@ impl<ID:Identifier, Data, C: IdCheck<ID>> ops::IndexMut<ID> for IdList<ID, Data,
     }
 }
 
+/// Use this as the NullId type parameter of the freelist if the id type is an option,
+/// to use `Option::None` as the null id value.
+pub struct NoneAsNullId;
+
+impl<T> NullId<Option<T>> for NoneAsNullId {
+    fn null_id() -> Option<T> { None }
+}
 
 
 #[cfg(test)]
@@ -208,16 +216,16 @@ type TestId = Id<u32, u32>;
 struct MagicValue;
 
 #[cfg(test)]
-impl IdCheck<TestId> for MagicValue {
-    fn none() -> TestId { return FromIndex::from_index(::std::u32::MAX as usize); }
+impl NullId<TestId> for MagicValue {
+    fn null_id() -> TestId { return FromIndex::from_index(::std::u32::MAX as usize); }
 }
 
 #[cfg(test)]
-type TestIdList = IdList<TestId, u32, MagicValue>;
+type TestIdFreeList = IdFreeList<TestId, u32, MagicValue>;
 
 #[test]
 fn vector_list() {
-    let mut list: TestIdList = TestIdList::with_capacity(10);
+    let mut list: TestIdFreeList = TestIdFreeList::with_capacity(10);
     assert!(list.is_empty());
     assert_eq!(list.count(), 0);
     assert!(list.first_id().is_none());

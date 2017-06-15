@@ -3,16 +3,17 @@ use std::ops::Add;
 use std::hash::{ Hash, Hasher };
 
 mod id_vector;
-pub mod sparse_id_vector;
-pub mod id_list;
+mod id_list;
+//pub mod sparse_id_vector;
 
-pub use id_vector::{ IdSlice, MutIdSlice, IdVector };
+pub use id_vector::{ IdSlice, MutIdSlice, IdVec };
+pub use id_list::{ IdFreeList, NullId, NoneAsNullId };
 
 // --------------------------------------------------------------------------------------------- Id
 
-pub struct Id<T, H> {
-    pub handle: H,
-    pub _marker: PhantomData<T>
+pub struct Id<Tag, Handle = u32> {
+    pub handle: Handle,
+    pub _marker: PhantomData<Tag>
 }
 
 impl<T, H: std::fmt::Display> std::fmt::Debug for Id<T, H> {
@@ -226,6 +227,10 @@ pub trait Identifier: Copy + FromIndex + ToIndex + PartialEq {
     type Unit;
 }
 
+impl Identifier for u8 { type Handle = u8; type Unit = (); }
+impl Identifier for u16 { type Handle = u16; type Unit = (); }
+impl Identifier for u32 { type Handle = u32; type Unit = (); }
+impl Identifier for u64 { type Handle = u64; type Unit = (); }
 
 impl ToIndex for u8 { fn to_index(&self) -> usize { *self as usize } }
 impl ToIndex for u16 { fn to_index(&self) -> usize { *self as usize } }
@@ -240,9 +245,9 @@ impl FromIndex for u64 { fn from_index(idx: usize) -> u64 { idx as u64 } }
 impl FromIndex for usize { fn from_index(idx: usize) -> usize { idx } }
 
 impl Generation for u8  { fn get_gen(&self) -> u32 { *self as u32 } }
-impl Generation for u16  { fn get_gen(&self) -> u32 { *self as u32 } }
-impl Generation for u32  { fn get_gen(&self) -> u32 { *self as u32 } }
-impl Generation for u64  { fn get_gen(&self) -> u32 { *self as u32 } }
+impl Generation for u16 { fn get_gen(&self) -> u32 { *self as u32 } }
+impl Generation for u32 { fn get_gen(&self) -> u32 { *self as u32 } }
+impl Generation for u64 { fn get_gen(&self) -> u32 { *self as u32 } }
 
 impl<T, H:Copy, G:Generation> Generation for GenId<T, H, G>  {
     fn get_gen(&self) -> u32 { self.gen.get_gen() }
