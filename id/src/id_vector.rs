@@ -230,4 +230,5 @@ fn test_id_vector() {
 #[test]
 fn test_id_vector_u32() {
     let _: IdVec<u32, u32> = IdVec::new();
+    let _: IdVec<i32, i32> = IdVec::new();
 }

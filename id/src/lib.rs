@@ -231,18 +231,32 @@ impl Identifier for u8 { type Handle = u8; type Unit = (); }
 impl Identifier for u16 { type Handle = u16; type Unit = (); }
 impl Identifier for u32 { type Handle = u32; type Unit = (); }
 impl Identifier for u64 { type Handle = u64; type Unit = (); }
+impl Identifier for i8 { type Handle = i8; type Unit = (); }
+impl Identifier for i16 { type Handle = i16; type Unit = (); }
+impl Identifier for i32 { type Handle = i32; type Unit = (); }
+impl Identifier for i64 { type Handle = i64; type Unit = (); }
 
 impl ToIndex for u8 { fn to_index(&self) -> usize { *self as usize } }
 impl ToIndex for u16 { fn to_index(&self) -> usize { *self as usize } }
 impl ToIndex for u32 { fn to_index(&self) -> usize { *self as usize } }
 impl ToIndex for u64 { fn to_index(&self) -> usize { *self as usize } }
 impl ToIndex for usize { fn to_index(&self) -> usize { *self } }
+impl ToIndex for i8 { fn to_index(&self) -> usize { *self as usize } }
+impl ToIndex for i16 { fn to_index(&self) -> usize { *self as usize } }
+impl ToIndex for i32 { fn to_index(&self) -> usize { *self as usize } }
+impl ToIndex for i64 { fn to_index(&self) -> usize { *self as usize } }
+impl ToIndex for isize { fn to_index(&self) -> usize { *self as usize } }
 
 impl FromIndex for u8 { fn from_index(idx: usize) -> u8 { idx as u8 } }
 impl FromIndex for u16 { fn from_index(idx: usize) -> u16 { idx as u16 } }
 impl FromIndex for u32 { fn from_index(idx: usize) -> u32 { idx as u32 } }
 impl FromIndex for u64 { fn from_index(idx: usize) -> u64 { idx as u64 } }
 impl FromIndex for usize { fn from_index(idx: usize) -> usize { idx } }
+impl FromIndex for i8 { fn from_index(idx: usize) -> i8 { idx as i8 } }
+impl FromIndex for i16 { fn from_index(idx: usize) -> i16 { idx as i16 } }
+impl FromIndex for i32 { fn from_index(idx: usize) -> i32 { idx as i32 } }
+impl FromIndex for i64 { fn from_index(idx: usize) -> i64 { idx as i64 } }
+impl FromIndex for isize { fn from_index(idx: usize) -> isize { idx as isize } }
 
 impl Generation for u8  { fn get_gen(&self) -> u32 { *self as u32 } }
 impl Generation for u16 { fn get_gen(&self) -> u32 { *self as u32 } }
@@ -258,6 +272,11 @@ impl IntegerHandle for u16 {}
 impl IntegerHandle for u32 {}
 impl IntegerHandle for u64 {}
 impl IntegerHandle for usize {}
+impl IntegerHandle for i8 {}
+impl IntegerHandle for i16 {}
+impl IntegerHandle for i32 {}
+impl IntegerHandle for i64 {}
+impl IntegerHandle for isize {}
 
 
 // ------------------------------------------------------------------------------------------ tests
